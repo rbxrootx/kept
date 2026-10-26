@@ -52,16 +52,31 @@ All crypto is either from Apple frameworks (CommonCrypto, CryptoKit) or implemen
 
 ## Install
 
-Requires macOS 14 (Sonoma) or later and Xcode 16 / Swift 6 command-line tools.
+### Download (recommended)
+
+1. Download **Kept.zip** from the [latest release](https://github.com/rbxrootx/kept/releases/latest). It's a universal build for Apple Silicon and Intel, macOS 14+.
+2. Unzip it and drag **Kept.app** into **Applications**.
+3. The first time you open it, macOS will warn that it's from an unidentified developer, because the build isn't notarized by Apple. To allow it, try to open Kept once, then go to **System Settings → Privacy & Security** and click **Open Anyway**. Or run:
+   ```sh
+   xattr -dr com.apple.quarantine /Applications/Kept.app
+   ```
+
+### Build from source
+
+Requires Xcode 16 / Swift 6 command-line tools.
 
 ```sh
 git clone https://github.com/rbxrootx/kept.git
 cd kept
-Scripts/build.sh            # builds build/Kept.app
+Scripts/build.sh            # builds build/Kept.app (universal)
 Scripts/build.sh install    # …and copies it to /Applications
 ```
 
-The build is ad-hoc signed. If macOS refuses to open it the first time, right-click **Kept.app** and choose **Open**. You can also open `Package.swift` in Xcode and run the `Kept` scheme.
+You can also open `Package.swift` in Xcode and run the `Kept` scheme.
+
+### Releasing
+
+Pushing a tag like `v1.1.0` runs [`.github/workflows/release.yml`](.github/workflows/release.yml), which tests, builds and attaches `Kept.zip` to a GitHub release. If you add a Developer ID certificate and notary credentials as repository secrets (see the workflow file), releases are signed and notarized, and the Gatekeeper warning goes away.
 
 ### Try it with the demo database
 
